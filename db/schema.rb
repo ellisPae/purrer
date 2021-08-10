@@ -17,10 +17,11 @@ ActiveRecord::Schema.define(version: 2021_08_09_144506) do
 
   create_table "follows", force: :cascade do |t|
     t.integer "follower_id"
-    t.integer "followed_user_id"
+    t.integer "followee_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["followed_user_id"], name: "index_follows_on_followed_user_id"
+    t.index ["followee_id"], name: "index_follows_on_followee_id"
+    t.index ["follower_id", "followee_id"], name: "index_follows_on_follower_id_and_followee_id", unique: true
     t.index ["follower_id"], name: "index_follows_on_follower_id"
   end
 
@@ -57,6 +58,7 @@ ActiveRecord::Schema.define(version: 2021_08_09_144506) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.string "name"
     t.string "email"
     t.string "handle"
     t.string "phone_number"

@@ -5,7 +5,7 @@ class User < ApplicationRecord
     validates :password, length: {minimum: 6, allow_nil: true}
     validates :bio, length: {maximum: 160}
 
-    before validation :ensure_session_token
+    before_validation :ensure_session_token
 
     has_many :purrs,
         class_name: :Purr,
@@ -20,15 +20,29 @@ class User < ApplicationRecord
         through: :purrs,
         source: :likes
     
-    has_many :followings,
+    # -------------------------------------------------
+    
+    has_many :followees,
         class_name: :Follow,
-        foreign_key: :followed_user_id
-    # followings === other users that the current user is following
+        foreign_key: :followee_id,
+        dependent: :destroy
+        
+    has_many :followings,
+        through: :followees,
+        source: :followee
+
+
+    # -------------------------------------------------
+
+    has_many :followed_by_users,
+        class_name: :Follow,
+        foreign_key: :follower_id,
+        dependent: :destroy
 
     has_many :followers,
-        through: :followings,
+        through: :followed_by_users,
         source: :follower
-    # followers === other users that are following the current user
+
 
         
 

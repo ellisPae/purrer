@@ -4,6 +4,7 @@ class CreatePurrs < ActiveRecord::Migration[6.1]
       t.text :content, null: false
       t.integer :user_id, null: false
       t.references :original_purr
+      
       t.timestamps
     end
 
