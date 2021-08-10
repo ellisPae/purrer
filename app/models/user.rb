@@ -15,20 +15,20 @@ class User < ApplicationRecord
         through: :purrs,
         source: :body
 
-    # if a user responds/comments to a tweet, that response/comment
-    # becomes the current user's tweet? 
 
     has_many :likes,
         through: :purrs,
         source: :likes
     
     has_many :followings,
-        class_name: :User,
+        class_name: :Follow,
         foreign_key: :followed_user_id
+    # followings === other users that the current user is following
 
     has_many :followers,
-        through: :followed_users,
+        through: :followings,
         source: :follower
+    # followers === other users that are following the current user
 
         
 
