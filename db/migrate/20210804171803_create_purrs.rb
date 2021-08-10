@@ -1,9 +1,9 @@
 class CreatePurrs < ActiveRecord::Migration[6.1]
   def change
     create_table :purrs do |t|
-      t.text :body, null: false
+      t.text :content, null: false
       t.integer :user_id, null: false
-      t.references :purrable, polymorphic: true
+      t.references :original_purr
       t.timestamps
     end
 

@@ -4,7 +4,7 @@ class CreateReplies < ActiveRecord::Migration[6.1]
       t.text :body, null: false
       t.integer :user_id, null: false
       t.integer :purr_id
-      t.references :replyable, polymorphic: true
+      t.references :parent, polymorphic: true
 
       t.timestamps
     end

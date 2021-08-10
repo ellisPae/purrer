@@ -11,13 +11,13 @@ class Reply < ApplicationRecord
         foreign_key: :purr_id,
         optional: true
 
-    belongs_to :reply,
+    belongs_to :parent,
         class_name: :Reply,
-        optional: true
+        polymorphic: true
 
     has_many :replies,
         class_name: :Reply,
-        foreign_key: :reply_id
+        as: :parent
 
     # A reply optionally belongs to a tweet, but also can be retweeted
     # A reply can also belong to another reply of a tweet
