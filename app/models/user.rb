@@ -21,28 +21,29 @@ class User < ApplicationRecord
         source: :likes
     
     # -------------------------------------------------
+    # Being followed:
     
-    has_many :followees,
+    has_many :passive_follows,
         class_name: :Follow,
         foreign_key: :followee_id,
         dependent: :destroy
         
-    has_many :followings,
-        through: :followees,
-        source: :followee
-
-
+    has_many :followers,
+        through: :passive_follows,
+        source: :follower
+        
     # -------------------------------------------------
-
-    has_many :followed_by_users,
+    # Following:
+    
+    has_many :active_follows,
         class_name: :Follow,
         foreign_key: :follower_id,
         dependent: :destroy
-
-    has_many :followers,
-        through: :followed_by_users,
-        source: :follower
-
+        
+    has_many :followings,
+        through: :active_follows,
+        source: :followee
+        
 
         
 
@@ -50,7 +51,14 @@ class User < ApplicationRecord
 
 
     def self.find_by_credentials(identifier, password)
-        user = User.find_by(email: identifier) || User.find_by(phone_number: identifier)
+        user = User.find_by(email: identifier)
+        if !user
+            user = User.find_by(handle: identifier)
+        else
+            user - User.find_by(phone_number: identifier)
+        end
+
+        # user = User.find_by(email: identifier) || User.find_by(phone_number: identifier) || User.find_by(handle: identifier)
         user && user.is_password?(password) ? user : nil 
     end
 
